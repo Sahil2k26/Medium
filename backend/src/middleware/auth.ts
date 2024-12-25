@@ -5,6 +5,9 @@ export const auth=async (c:any, next:any) => {
     const t = c.req.header("Authorization")
     const ar = t?.split(" ")
     if (ar?.length != 2) {
+        console.log("error in auth");
+        console.log(t);
+        
         c.status(400);
         return c.json({
             error:"Invalid format"

@@ -43,7 +43,7 @@ export const Sign = ({type}:input) => {
             if (d.status == 200) {
                 localStorage.setItem("token", d.data.token)
                 alert("Logged in Successfully");
-                nav("/blog")
+                nav("/blogs")
             }
 
         }
@@ -64,7 +64,7 @@ export const Sign = ({type}:input) => {
                 <span className="text-4xl font-bold text-black  ">{type==0?"Create an account":"Login to your account"}</span>
                 <div className="flex p-1 items-center justify-center">
                     <span className="text-gray-600 text-base">{type==0?"Already have an account ?":"Don't have an account ?"}</span>
-                    <button className=" border-none bg-transparent p-1 text-gray-600 text-base underline" 
+                    <button className=" border-none bg-transparent p-1 text-blue-500 text-base underline" 
                     onClick={() => {
 
                         type==0?nav("/login"):nav("/signup")
@@ -155,7 +155,7 @@ export const Sign = ({type}:input) => {
 
             </div>
             <button className="w-[80%] bg-black px-4 py-3 text-white text-center font-semibold text-lg rounded-xl flex justify-center items-center hover:bg-slate-800"
-             onClick={handleClick} >{load == true ? <Loader></Loader> : type==0?"Sign Up":"Login"}</button>
+             onClick={handleClick} >{load == true ? <Loader size={9} color="white"></Loader> : type==0?"Sign Up":"Login"}</button>
 
         </div>
     </div>

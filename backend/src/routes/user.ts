@@ -35,6 +35,17 @@ userRouter.post('/signup', async (c) => {
     try {
         const hashedpass=await bcrypt.hash(body.password,10);
         const prisma = c.get('prisma')
+        const u=await prisma.user.findUnique({
+            where:{
+               email:body.email 
+            }
+        })
+        if(u) {
+            return c.json({
+                error:"User Already Exists"
+            },403)
+        }
+
         const user = await prisma.user.create({
             data: {
                 email: body.email,
@@ -52,9 +63,9 @@ userRouter.post('/signup', async (c) => {
     } catch (e) {
         console.log(e);
 
-        c.status(403)
+        c.status(500)
         return c.json({
-            error:"User already exists"
+            error:"Server Error"
         })
     }
 
@@ -97,12 +108,30 @@ userRouter.post('/login', async (c) => {
         return c.json({ token: token })
     } catch (e) {
         console.log(e);
-        c.status(403)
+        c.status(500)
         return c.json({
-            error:"Invalid request"
+            error:"Server Error",
+            msg:e
         })
 
     }
 
 
+})
+
+userRouter.get("/bulk",async (c)=>{
+    const prisma=c.get("prisma")
+    const d=await prisma.user.findMany({
+        select:{
+            id:true,
+            email:true,
+            password:true,
+            name:true,
+            blogs:true
+            
+        }
+    });
+    return c.json({
+        users:d
+    })
 })

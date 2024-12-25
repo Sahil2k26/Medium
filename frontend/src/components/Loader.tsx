@@ -1,8 +1,8 @@
 
-const Loader = () => {
+const Loader = ({color="white",size=9}:{color:string,size:number}) => {
   return (
     <div className="flex justify-center items-center ">
-      <div className="w-9 h-9 border-4 border-dashed rounded-full animate-spin border-white"></div>
+      <div className={`w-${size} h-${size} border-4 border-dashed rounded-full animate-spin border-${color}`}></div>
     </div>
   );
 };

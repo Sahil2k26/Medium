@@ -22,12 +22,14 @@ blogRouter.use("/*", pris);
 blogRouter.use("/*", auth);
 
 
-blogRouter.post('/', async (c) => {
+blogRouter.post('/createBlog', async (c) => {
     // console.log(c.get("userId"));
     const body = await c.req.json()
     const authorId = c.get("userId")
     const response = createblogSchema.safeParse(body)
     if (!response.success) {
+        console.log(body);
+    
         c.status(400)
         return c.json({error:"Invalid format"})
     }
@@ -38,7 +40,9 @@ blogRouter.post('/', async (c) => {
             data: {
                 title: body.title,
                 content: body.content,
-                authorId: parseInt(authorId)
+                authorId: parseInt(authorId),
+                published:body.published
+
             }
         })
         return c.json({
@@ -99,14 +103,28 @@ blogRouter.get("/bulk", async (c) => {
     try {
         const prisma = c.get("prisma")
         const posts = await prisma.blog.findMany({
-            // where: {
-            //     authorId: id
-            // }
+            select:{
+                title:true,
+                content:true,
+                id:true,
+                createdAt:true,
+                author:{
+                    select:{
+                        name:true
+                    }
+                },
+               
+            },
+            where: {
+                published:true
+            }
         })
         return c.json({
             posts: posts
         })
     } catch (e) {
+        console.log(e);
+        
         c.status(500)
         return c.json({
             error:"Server error"
@@ -121,8 +139,23 @@ blogRouter.get("/:id", async (c) => {
         const blog = await prisma.blog.findUnique({
             where: {
                 id: parseInt(id)
+            },
+            select:{
+                title:true,
+                content:true,
+                id:true,
+                createdAt:true,
+                author:{
+                    select:{
+                        name:true
+                    }
+                }
             }
+
         })
+        if(!blog) return c.json({
+            error:"Blog Does not Exists"
+        },404)
         return c.json({
             blog: blog
         })
@@ -135,4 +168,11 @@ blogRouter.get("/:id", async (c) => {
         })
     }
 
+})
+blogRouter.delete("/deleteAll",async (c)=>{
+    const prisma=c.get("prisma")
+    await prisma.blog.deleteMany();
+    return c.json({
+        msg:"Done"
+    })
 })
