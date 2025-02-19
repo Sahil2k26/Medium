@@ -16,7 +16,7 @@ export const BlogPage=()=>{
     } 
     if(loading){
         return <div className="w-[100vw] h-[100vh] flex justify-center items-center text-4xl font-semibold  flex-col">
-            <Loader size={9} color="black"></Loader>
+            <Loader color="black"></Loader>
             <span>Loading...</span>
         </div>
     }

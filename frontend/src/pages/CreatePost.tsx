@@ -89,7 +89,7 @@ export function CreatePost() {
                 }
                 } >
                     {loading?<><span>{"Drafting..."}</span>
-                    <Loader color="black" size={5}></Loader></>:"Save as Draft"}
+                    <Loader color="black" ></Loader></>:"Save as Draft"}
                 </button>
                  
                 <button className="px-3 py-1 rounded-xl bg-gradient-to-r from-purple-400 to-blue-300 text-white  font-semibold hover:font-bold flex " disabled={publishing} onClick={async()=>{
@@ -97,7 +97,7 @@ export function CreatePost() {
                     await handlePublish(true)
         
                     }}>{loading==true ?<><span>{"Publishing..."}</span>
-                    <Loader color="white" size={5}></Loader></>:"Publish"}
+                    <Loader color="white" ></Loader></>:"Publish"}
 
                     </button>
             

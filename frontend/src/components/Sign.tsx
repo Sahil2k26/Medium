@@ -155,7 +155,7 @@ export const Sign = ({type}:input) => {
 
             </div>
             <button className="w-[80%] bg-black px-4 py-3 text-white text-center font-semibold text-lg rounded-xl flex justify-center items-center hover:bg-slate-800"
-             onClick={handleClick} >{load == true ? <Loader size={9} color="white"></Loader> : type==0?"Sign Up":"Login"}</button>
+             onClick={handleClick} >{load == true ? <Loader color="white"></Loader> : type==0?"Sign Up":"Login"}</button>
 
         </div>
     </div>

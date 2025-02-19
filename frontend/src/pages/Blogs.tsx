@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { AppBar } from "../components/AppBar";
-import { Blog } from "../components/Blog";
-import Loader from "../components/Loader";
-import { useBlogs } from "../hooks";
+import { Fyp } from "../components/Fyp";
+import { MyPosts } from "../components/MyPosts";
+
 
 
 export default function Blogs (){
+
     const token=localStorage.getItem("token");
     if(!token){
         return <div className="w-[100vw] h-[100vh] flex justify-center items-center text-4xl font-semibold text-black ">
@@ -12,31 +14,22 @@ export default function Blogs (){
             
         </div>
     }
-    const {loading,blogs}=useBlogs();
-    if(loading){
-        return <div className="w-[100vw] h-[100vh] flex justify-center items-center text-4xl font-semibold  flex-col">
-            <Loader size={9} color="black"></Loader>
-            <span>Loading...</span>
-        </div>
-    }
+    const [toggle,setToggle]=useState(false);
     return <div className="w-[100vw] h-[100vh] flex flex-col items-center relative overflow-x-hidden bg-gradient-to-r from-purple-400 to-blue-300">
         <AppBar></AppBar>
-        <div className="w-[60%] flex flex-col items-start justify-center">
-        {blogs.map((b)=>{
-            return <Blog 
-            id={b.id}
-            authorName={b.author.name || "Anonymus"} 
-            title={b.title} 
-            content={b.content}
-            publishedDate={b.createdAt.split('T')[0]}
-            key={b.id}></Blog>
+        
+        <div className="flex w-[60%] ">
+            <button className={`${toggle?"bg-gray-100 brightness-[0.8]":"bg-white font-bold "}  px-5 py-3 text-lg font-mono hover:bg-black hover:text-white hover:font-semibold  rounded-xl rounded-b-none`} onClick={()=>{
+                if(!toggle) return;
+                setToggle((t)=>!t);
+            }}>For you</button>
+            <button className={`${!toggle?"bg-gray-100 brightness-[0.8]":"bg-white font-bold "}  px-5 py-3 text-lg font-mono hover:bg-black hover:text-white hover:font-semibold  rounded-xl rounded-b-none`} onClick={()=>{
+                if(toggle) return;
+                setToggle((t)=>!t);
+            }}>My Posts</button>
 
-        })}
-        {/* <Blog authorName="Sahil Kansal" 
-        title="How an ugly single page website makes $5000 a month withoutt affiliate marketting"
-        content="How an ugly single page website makes $5000 a month withoutt affiliate marketting How an ugly single page website makes $5000 a month withoutt affiliate marketting"
-        publishedDate="13 Oct 2024"></Blog> */}
-
+        
         </div>
+        {toggle?<MyPosts></MyPosts>:<Fyp></Fyp>}
     </div>
 }

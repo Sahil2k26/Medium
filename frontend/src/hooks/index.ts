@@ -9,16 +9,17 @@ interface Blog{
     createdAt:string,
     author:{
         name:string
-    }
+    },
+    published?:boolean
 }
-export const useBlogs=()=>{
+export const useBlogs=(type:boolean)=>{
     const [loading,setLoading]=useState(true);
     const [blogs,setblogs]=useState<Blog[]>([]);
     const token=localStorage.getItem("token");
 
     useEffect(()=>{
         try{
-            axios.get(`${BACKEND_URL}/api/v1/blog/bulk`,
+            axios.get(`${BACKEND_URL}/api/v1/blog/${type?"myposts":"bulk"}`,
                 { headers:{
                       Authorization:"Bearer"+" "+token          
                     }
@@ -37,7 +38,7 @@ export const useBlogs=()=>{
             
         }
         
-    },[])
+    },[type])
     return {
         loading,blogs
     }

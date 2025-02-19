@@ -132,6 +132,50 @@ blogRouter.get("/bulk", async (c) => {
     }
 
 })
+blogRouter.get("/myposts",async (c)=>{
+    const prisma=c.get("prisma");
+    const id=c.get("userId");
+    console.log(id);
+    
+    try{
+        const p=await prisma.blog.findMany({
+            where:{
+                authorId:id
+            },
+            select:{
+            
+                title:true,
+                content:true,
+                id:true,
+                createdAt:true,
+                author:{
+                    select:{
+                        name:true
+                    }
+                },
+                published:true
+
+                
+                
+    
+            }
+    
+    
+        })
+        return c.json({
+            posts:p
+        })
+
+    }catch(e){
+        console.log(e);
+        c.status(500);
+        return c.json({
+            error:"server Error"
+        })
+        
+    }
+    
+})
 blogRouter.get("/:id", async (c) => {
     const id = c.req.param('id')
     try {
@@ -169,6 +213,7 @@ blogRouter.get("/:id", async (c) => {
     }
 
 })
+
 blogRouter.delete("/deleteAll",async (c)=>{
     const prisma=c.get("prisma")
     await prisma.blog.deleteMany();
